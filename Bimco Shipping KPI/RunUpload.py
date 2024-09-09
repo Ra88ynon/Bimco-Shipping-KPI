@@ -89,8 +89,8 @@ Header2=['IMO No','Vessel','Management Type','','','','','Environmental','Health
 
 
 logging.info('Python function ran at %s', utc_timestamp )
-Quarter='2024-Q1'
-Query="select * from SAPHANA_API_GLAccount"
+Quarter='2024-Q2'
+#Query="select * from SAPHANA_API_GLAccount"
 data=Sql.selectTable ("stage_ShippingKPI","*",f"Quarter='{Quarter}'")
 logging.info(Quarter)
 print(data)
@@ -105,11 +105,12 @@ header=[Header2]
 data=header+data
 data=pd.DataFrame(data,columns=Header1)
 
-data.to_csv(f"{Quarter}.csv",index=False)
+#data.to_csv(f"{Quarter}.csv",index=False)
 token=API.GetToken()
 jsonpath=f"{Quarter}.json"
-df=pd.read_csv(f"{Quarter}.csv", encoding='cp1252')
-df.to_json(jsonpath,orient ='records')
+#df=pd.read_csv(f"{Quarter}.csv", encoding='cp1252')
+data.to_json(jsonpath,orient ='records')
 Data=API.ValidateUpload(token,jsonpath,Quarter,"Merge")#Perform upload from APIFile function
+logging.info(Data)
 logging.info("done")
 logging.info('Python function end at %s', utc_timestamp )

@@ -74,8 +74,8 @@ def getbenchmark(token,startQ,endQ):
 
     data = {
         "periodCode": "PreviousQuarter",
-        "startQuarter": "2023-Q1",
-        "endQuarter": "2023-Q2",
+        "startQuarter": startQ,
+        "endQuarter":endQ ,
         "excludeMyShipsFromIndustryShips": False,
         #"ownFilters": [],
         #"industryFilters": [],
@@ -104,12 +104,15 @@ def ValidateUpload(token,path,Quarter,mode):
     if response.status_code == 200:
         response_data=response.json()
         print(response_data)
+        
         Upload(token, Quarter, response_data["cacheKey"], mode)#perform upload
         # Pretty print the response JSON
-        # return (response.json())
+        return response_data
     else:
         print("Failed to send data. Status code:", response.status_code)
         print("Response:", response.text)
+        return(response.text)
+        
 def Upload(token,Quarter,cache_key,mode):
     print("Validated, Uploading...")
     url = End+'/MyShips/Upload'
@@ -131,5 +134,25 @@ def Upload(token,Quarter,cache_key,mode):
         print("Success:", response.text)
     else:
         print("Failed to send data. Status code:", response.status_code)
+        print("Response:", response.text)
+def getBenchmarkFilter(Token,vesselImoNumber,Quarter):
+    url = 'https://skpiapi-test.azurewebsites.net/api/Benchmark/GetAvailableBenchmarkFilters'
+    params = {
+        'vesselImoNumber': vesselImoNumber,
+        'quarter': Quarter
+    }
+    headers = {
+        'accept': '*/*',
+        'Authorization': f'Bearer {Token}'
+    }
+
+    response = requests.get(url, headers=headers, params=params)
+
+    # Check if the request was successful
+    if response.status_code == 200:
+        # Assuming the response is JSON, parse and print it
+        print(json.dumps(response.json(), indent=4))
+    else:
+        print("Failed to get data. Status code:", response.status_code)
         print("Response:", response.text)
 

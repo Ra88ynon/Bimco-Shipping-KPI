@@ -2,7 +2,7 @@ import pyodbc as p
 import os
 from dotenv import load_dotenv
 load_dotenv()
-connStr =os.getenv("connStrW")
+connStr = os.getenv("connStrW")  # Remove trusted connection and add password
 conn = p.connect(connStr)
 mycursor = conn.cursor()
 def DeleteTable(TableName):
